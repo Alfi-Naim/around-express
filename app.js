@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
@@ -19,6 +20,8 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use(helmet());
 
 app.use('/', cardsRouter, usersRouter);
 

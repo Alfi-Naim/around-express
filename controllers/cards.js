@@ -13,7 +13,7 @@ module.exports.getCards = (req, res) => {
 module.exports.createCard = (req, res) => {
   const { name, link, owner = req.user._id } = req.body;
   Card.create({ name, link, owner })
-    .then((card) => res.status(200).send(card))
+    .then((card) => res.status(201).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') return res.status(ERROR_INVALIDE_INPUT).send({ message: err.message });
       res.status(ERROR_DEFAULT).send({ message: err.message })
@@ -29,7 +29,8 @@ module.exports.deleteCard = (req, res) => {
     })
     .then(() => res.status(200).send({ message: 'card deleted' }))
     .catch((err) => {
-      if (err.name === 'CardIdNotFound') return res.status(ERROR_CARD_NOT_FOUND).send({ message: err.message }); //res.status = 404
+      if (err.name === 'CastError') return res.status(ERROR_INVALIDE_INPUT).send({ message: err.message });
+      if (err.name === 'CardIdNotFound') return res.status(ERROR_CARD_NOT_FOUND).send({ message: err.message });
       res.status(ERROR_DEFAULT).send({ message: err.message })
     });
 };
@@ -43,7 +44,8 @@ module.exports.likeCard = (req, res) => {
     })
     .then((card) => res.status(200).send(card))
     .catch((err) => {
-      if (err.name === 'CardIdNotFound') return res.status(ERROR_CARD_NOT_FOUND).send({ message: err.message }); //res.status = 404
+      if (err.name === 'CastError') return res.status(ERROR_INVALIDE_INPUT).send({ message: err.message });
+      if (err.name === 'CardIdNotFound') return res.status(ERROR_CARD_NOT_FOUND).send({ message: err.message });
       res.status(ERROR_DEFAULT).send({ message: err.message })
     });
 };
@@ -57,7 +59,8 @@ module.exports.unlikeCard = (req, res) => {
     })
     .then((card) => res.status(200).send(card))
     .catch((err) => {
-      if (err.name === 'CardIdNotFound') return res.status(ERROR_CARD_NOT_FOUND).send({ message: err.message }); //res.status = 404
+      if (err.name === 'CastError') return res.status(ERROR_INVALIDE_INPUT).send({ message: err.message });
+      if (err.name === 'CardIdNotFound') return res.status(ERROR_CARD_NOT_FOUND).send({ message: err.message });
       res.status(ERROR_DEFAULT).send({ message: err.message })
     });
 };
