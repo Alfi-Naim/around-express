@@ -1,17 +1,13 @@
 const cardsRouter = require('express').Router();
-const fsPromises = require('fs').promises;
-const path = require('path');
 
-const cardsPath = path.join(__dirname, '../data/cards.json');
-const readFile = fsPromises.readFile(cardsPath, { encoding: 'utf-8' });
+const bodyParser = require('body-parser').json();
 
-cardsRouter.get('/cards', (req, res) => {
-  readFile.then((data) => {
-    res.status(200).send(JSON.parse(data));
-  })
-    .catch(() => {
-      res.status(500).send({ message: 'Requested resource not found' });
-    });
-});
+const { getCards, deleteCard, createCard, likeCard, unlikeCard } = require('../controllers/cards');
+
+cardsRouter.get('/cards', getCards);
+cardsRouter.delete('/cards/:cardId', deleteCard);
+cardsRouter.post('/cards', bodyParser, createCard);
+cardsRouter.put('/cards/:cardId/likes', likeCard);
+cardsRouter.delete('/cards/:cardId/likes', unlikeCard);
 
 module.exports = cardsRouter;
