@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require ('validator');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -10,9 +11,9 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     validate: {
-      validator: function(v) {
-        return /https?:\/\/(www\.)?[-a-zA-Z0-9\._~:\/\?%#\[\]@!$&'()*+,;=]{1,}/.test(v);
-      }
+      validator(link) {
+        return validator.isURL(link);
+      },
     },
     required: true
   },
